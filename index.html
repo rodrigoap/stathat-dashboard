@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>StatHat Dashboard</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+      .draggable { width: 150px; height: 150px; padding: 0.5em; }
+  </style>
+  <script>
+    $(function() {
+      $(".draggable").draggable();
+    });
+
+    function add() {
+      var statName = $("#statName").val();
+      $("#dashboard").append("<div id='"+statName+"' class='draggable ui-widget-content'>"+statName+"</div>");
+      $(".draggable").draggable();
+    }
+
+    function save() {
+      var dashboardContent = {};
+      dashboardContent.stats = new Array();
+      $( ".draggable" ).each(function(index, element){
+        var offset = $("#" + element.id).offset();
+        var stat = {};
+        stat.name = element.id;
+        stat.y = offset.top;
+        stat.x = offset.left;
+        dashboardContent.stats.push(stat);
+      });
+      var jsonText = JSON.stringify(dashboardContent, null, 2);
+      alert(jsonText);
+    }
+
+  </script>
+</head>
+<body>
+ <input id="statName" type="text" name="statName" value=""/><button onClick="add()">Add</button>
+ <button onClick="save()">Save</button>
+ <div id="dashboard"></div> 
+</body>
+</html>
