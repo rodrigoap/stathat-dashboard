@@ -8,29 +8,55 @@
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <link rel="stylesheet" href="/resources/demos/style.css">
   <style>
-      .draggable { width: 150px; height: 150px; padding: 0.5em; }
+      .draggable { width: 5px; height: 5px; padding: 0.1em; background-color: red }
   </style>
   <script>
     $(function() {
       $(".draggable").draggable();
     });
 
+    var dashboardContent = {};
+    dashboardContent.stats = {};
+
     function add() {
+      //ANklJ KeRcj EAnL
       var statName = $("#statName").val();
-      $("#dashboard").append("<div id='"+statName+"' class='draggable ui-widget-content'>"+statName+"</div>");
+      if (dashboardContent.stats[statName]) {
+        if (confirm("Stat already exists. Replace?")) {
+          $("#" + statName).remove();
+        } else {
+          return;
+        }
+      }
+
+      var chartSizes = new Array();
+      chartSizes['micro'] = {w:150, h:50};
+      chartSizes['small'] = {w:300, h:100};
+      chartSizes['medium'] = {w:400, h:150};
+      chartSizes['large'] = {w:500, h:200};
+
+      var chartStyle = $("#chartStyle").val();
+      var chartSize = chartSizes[$("#chartSize").val()];
+      $("#dashboard").append("<div id='"+statName+"' class='draggable ui-widget-content'><script>StatHatEmbed.render({s1: '"+statName+"', w: "+chartSize.w+", h: "+chartSize.h+", tf:'half_compare', style:'"+chartStyle+"'});<\/script></div>");
       $(".draggable").draggable();
+
+      var stat = {};
+      stat.name = statName;
+      stat.chartStyle = chartStyle;
+      stat.chartSize = chartSize;
+      dashboardContent.stats[statName] = stat;
+      //alert("added " + dashboardContent.stats[statName].name);
     }
 
     function save() {
-      var dashboardContent = {};
-      dashboardContent.stats = new Array();
       $( ".draggable" ).each(function(index, element){
-        var offset = $("#" + element.id).offset();
-        var stat = {};
-        stat.name = element.id;
+        var statName = element.id;
+        alert("save " + statName);
+        var stat = dashboardContent.stats[statName];
+        var offset = $("#" + statName).offset();
         stat.y = offset.top;
         stat.x = offset.left;
-        dashboardContent.stats.push(stat);
+        //dashboardContent.stats[statName] = stat;
       });
       var jsonText = JSON.stringify(dashboardContent, null, 2);
       alert(jsonText);
@@ -39,7 +65,20 @@
   </script>
 </head>
 <body>
- <input id="statName" type="text" name="statName" value=""/><button onClick="add()">Add</button>
+  <script src="//www.stathat.com/javascripts/embed.js"></script>
+ <input id="statName" type="text" name="statName" value=""/>
+ <select id="chartStyle" name="chartStyle" required="true">
+  <option value="spark" default="true">Spark</option>
+  <option value="mini">Mini</option>
+  <option value="fill">Fill</option>
+ </select>
+ <select id="chartSize" name="chartSize" required="true">
+  <option value="micro">Micro</option>
+  <option value="small" default="true">Small</option>
+  <option value="medium">Medium</option>
+  <option value="large">Large</option>
+ </select>
+ <button onClick="add()">Add</button>
  <button onClick="save()">Save</button>
  <div id="dashboard"></div> 
 </body>
