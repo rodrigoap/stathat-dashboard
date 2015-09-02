@@ -6,10 +6,7 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <style>
-      .draggable { width: 5px; height: 5px; padding: 0.1em; background-color: red }
-  </style>
+  <link rel="stylesheet" href="style.css">
   <script>
     $(function() {
       switchDashboard();
@@ -41,6 +38,10 @@
       var chartStyle = $("#chartStyle").val();
       var chartSize = chartSizes[$("#chartSize").val()];
       var title = $("#title").val();
+      var chartFooter = "";
+      if (chartStyle === 'mini' ||chartStyle === 'spark') {
+        chartFooter = "<div class='chartFooter'>" + title + "</div>";
+      }
 
       $("#dashboard").append("<div id='"+statName+
         "' class='draggable ui-widget-content'><script>StatHatEmbed.render({s1: '"+statName+
@@ -48,7 +49,7 @@
           ", h: "+chartSize.h+
           ", title: '"+title+
           "', tf:'half_compare', style:'"+chartStyle+
-          "'});<\/script></div>");
+          "'});<\/script>"+chartFooter+"</div>");
       $("#" + statName).draggable();
 
       var stat = {};
@@ -95,7 +96,11 @@
           var chartSize = stat.chartSize;
           var title = stat.title;
           var chartStyle = stat.chartStyle;
-
+          var chartFooter = "";
+          if (chartStyle === 'mini' ||chartStyle === 'spark') {
+            chartFooter = "<div class='chartFooter'>" + title + "</div>";
+          }
+          
           $("#dashboard").append("<div id='"+statName+
               "' class='draggable ui-widget-content' style='position:absolute;left:"+stat.x+"px;top:"+stat.y+
               "px'><script>StatHatEmbed.render({s1: '"+statName+
@@ -103,7 +108,7 @@
               ", h: "+chartSize.h+
               ", title: '"+title+
               "', tf:'half_compare', style:'"+chartStyle+
-              "'});<\/script></div>");
+              "'});<\/script>"+chartFooter+"</div>");
           $("#" + statName).draggable();
         });
     });

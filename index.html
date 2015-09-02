@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href="style.css">
   <script>
 
     $(function() {
@@ -24,7 +24,10 @@
           var chartSize = stat.chartSize;
           var title = stat.title;
           var chartStyle = stat.chartStyle;
-
+          var chartFooter = "";
+          if (chartStyle === 'mini' ||chartStyle === 'spark') {
+            chartFooter = "<div class='chartFooter'>" + title + "</div>";
+          }
           $("#dashboard").append("<div id='"+statName+
               "' style='position:absolute;left:"+stat.x+"px;top:"+stat.y+
               "px'><script>StatHatEmbed.render({s1: '"+statName+
@@ -32,7 +35,7 @@
               ", h: "+chartSize.h+
               ", title: '"+title+
               "', tf:'half_compare', style:'"+chartStyle+
-              "'});<\/script></div>");
+              "'});<\/script>"+chartFooter+"</div>");
         });
     });
   }
