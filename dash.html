@@ -71,7 +71,7 @@
       var jsonText = JSON.stringify(dashboardContent, null, 2);
       //alert(jsonText);
       $.ajax({
-          url:"http://localhost/stathat/dao.php",
+          url:"dao.php",
           type:"PUT",
           data:jsonText,
           contentType:"application/json; charset=utf-8",

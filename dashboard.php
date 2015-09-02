@@ -61,7 +61,7 @@
     }
 
     function save() {
-      $( ".draggable" ).each(function(index, element){
+      $(".draggable").each(function(index, element){
         var statName = element.id;
         //alert("save " + statName);
         var stat = dashboardContent.stats[statName];
@@ -73,7 +73,7 @@
       var jsonText = JSON.stringify(dashboardContent, null, 2);
       //alert(jsonText);
       $.ajax({
-          url:"http://localhost/stathat/dao.php?id=" + dashId,
+          url:"dao.php?id=" + dashId,
           type:"POST",
           data:jsonText,
           contentType:"application/json; charset=utf-8",
@@ -85,7 +85,7 @@
     }
 
     function switchDashboard() {
-      $.get( "dao.php?id="+dashId, function(data) {
+      $.get("dao.php?id="+dashId, function(data) {
         //alert(data);
         dashboardContent = JSON.parse(data);
         //alert(dashboardContent);
