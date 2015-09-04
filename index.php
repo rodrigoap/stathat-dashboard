@@ -10,6 +10,13 @@
   <script>
 
     $(function() {
+      <?php
+          if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            echo "$('#dashboardId').val('" . $id . "');";
+            echo "switchDashboard('" . $id . "');";
+          }
+       ?>
     });
 
     function switchDashboard() {

@@ -24,37 +24,48 @@ switch ($method) {
 
 function rest_put($req, $dblink) {
 	$jsonText = file_get_contents('php://input');
-	$query = "insert into stat (json) values (?)";
+  $idDash = generateRandomString();
+	$query = "insert into stat (json, id_dash) values (?, ?)";
     $stmt = $dblink->prepare($query) or die("Prepare stmt die.");
-    $stmt->bind_param("s", $jsonText);
+    $stmt->bind_param("ss", $jsonText, $idDash);
     $stmt->execute();
-    echo '{ "id":' . $stmt->insert_id . '}';
+    echo '{ "id":"' . $idDash . '"}';
     $stmt->close();
 }
 
 function rest_post($req, $dblink) {
 	$jsonText = file_get_contents('php://input');
   $idDash = $_GET['id'];
-	$query = "update stat set json=? where id=?";
+	$query = "update stat set json=? where id_dash=?";
     $stmt = $dblink->prepare($query) or die("Prepare stmt die.");
-    $stmt->bind_param("si", $jsonText, $idDash);
+    $stmt->bind_param("ss", $jsonText, $idDash);
     $stmt->execute();
-    echo '{ "id":' . $idDash . '}';
+    echo '{ "id":"' . $idDash . '"}';
     $stmt->close();
 }
 
 function rest_get($req, $dblink) {
 	$json = "{}";
-	$id = $_GET['id'];
-	$query = "select json from stat where id=?";
+	$idDash = $_GET['id'];
+	$query = "select json from stat where id_dash=?";
     $stmt = $dblink->prepare($query) or die("Prepare stmt die.");
-    $stmt->bind_param("i", $id);
+    $stmt->bind_param("s", $idDash);
     $stmt->execute();
     $stmt->bind_result($json);
     if ($stmt->fetch()) {
     	echo $json;
     }
     $stmt->close();
+}
+
+function generateRandomString($length = 5) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
 }
 
 ?>

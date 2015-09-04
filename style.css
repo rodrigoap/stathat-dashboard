@@ -7,3 +7,8 @@
 .draggable {
   width: 5px; height: 5px; padding: 0.1em;
 }
+
+#menu {
+    background-color: white;
+    padding-bottom: 4px;
+}
