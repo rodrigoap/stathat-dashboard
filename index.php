@@ -66,6 +66,7 @@
   </script>
 </head>
 <body>
+  <?php include_once("analyticstracking.php") ?>
  <script src="//www.stathat.com/javascripts/embed.js"></script>
  <div id="menu">
   <img src="statdash.png" style="vertical-align:bottom"/>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -75,6 +76,5 @@
   <button onClick="create()">Create dashboard</button>
   </div>
  <div id="dashboard"></div>
- <?php include_once("analyticstracking.php") ?>
 </body>
 </html>
