@@ -45,29 +45,33 @@ function add() {
 }
 
 function save() {
-  $( ".draggable" ).each(function(index, element){
-    var statName = element.id;
-    //alert("save " + statName);
-    var stat = dashboardContent.stats[statName];
-    var offset = $("#" + statName).offset();
-    stat.y = offset.top;
-    stat.x = offset.left;
-    //dashboardContent.stats[statName] = stat;
-  });
-  dashboardContent.backgroundColor = $("#evt_color").val();
-  var jsonText = JSON.stringify(dashboardContent, null, 2);
-  //alert(jsonText);
-  $.ajax({
-      url:"dao.php",
-      type:"PUT",
-      data:jsonText,
-      contentType:"application/json; charset=utf-8",
-      dataType:"json",
-      success: function(data){
-        dashId = data.id;
-        vex.dialog.alert("OK! Your dashboard id is: " + data.id);
-      }
-  });
+  if (dashId==='') {
+    $( ".draggable" ).each(function(index, element){
+      var statName = element.id;
+      //alert("save " + statName);
+      var stat = dashboardContent.stats[statName];
+      var offset = $("#" + statName).offset();
+      stat.y = offset.top;
+      stat.x = offset.left;
+      //dashboardContent.stats[statName] = stat;
+    });
+    dashboardContent.backgroundColor = $("#evt_color").val();
+    var jsonText = JSON.stringify(dashboardContent, null, 2);
+    //alert(jsonText);
+    $.ajax({
+        url:"dao.php",
+        type:"PUT",
+        data:jsonText,
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        success: function(data){
+          dashId = data.id;
+          vex.dialog.alert("OK! Your dashboard id is: " + data.id);
+        }
+    });
+  } else {
+    update();
+  }
 }
 
 function update() {
