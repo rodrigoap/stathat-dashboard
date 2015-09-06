@@ -65,7 +65,7 @@ function save() {
       dataType:"json",
       success: function(data){
         dashId = data.id;
-        alert("OK! dashboard id:" + data.id);
+        vex.dialog.alert("OK! Your dashboard id:" + data.id);
       }
   });
 }
@@ -90,7 +90,7 @@ function update() {
       contentType:"application/json; charset=utf-8",
       dataType:"json",
       success: function(data){
-        alert("OK!");
+        vex.dialog.alert("OK! Dashboard saved.");
       }
   });
 }

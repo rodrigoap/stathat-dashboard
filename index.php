@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="vex.dialog.js"></script>
   <link rel="stylesheet" href="style.css">
   <script>
 
@@ -21,6 +22,7 @@
 
     function switchDashboard() {
       var dashId = $("#dashboardId").val();
+      $("#editCurrent").prop("disabled", false);
       $.get( "dao.php?id="+dashId, function(data) {
         //alert(data);
         var dashboardContent = JSON.parse(data);
@@ -62,10 +64,10 @@
  <script src="//www.stathat.com/javascripts/embed.js"></script>
  <div id="menu">
   <img src="statdash.png" style="vertical-align:bottom"/>&nbsp;&nbsp;|&nbsp;&nbsp;
-  <input id="dashboardId" name="dashboardId" type="text"/>
-  <button onClick="switchDashboard()">Set</button>&nbsp;
-  <button onClick="editCurrent()">Edit current</button>
-  <button onClick="create()">Create</button>
+  <input id="dashboardId" name="dashboardId" type="text" value="Dashboard id"/>
+  <button onClick="switchDashboard()">Load</button>&nbsp;
+  <button id="editCurrent" onClick="editCurrent()" disabled="true">Edit current</button>
+  <button onClick="create()">Create dashboard</button>
   </div>
  <div id="dashboard"></div>
 </body>
