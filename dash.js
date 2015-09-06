@@ -65,7 +65,7 @@ function save() {
       dataType:"json",
       success: function(data){
         dashId = data.id;
-        vex.dialog.alert("OK! Your dashboard id:" + data.id);
+        vex.dialog.alert("OK! Your dashboard id is: " + data.id);
       }
   });
 }
