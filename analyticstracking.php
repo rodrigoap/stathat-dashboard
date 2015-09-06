@@ -1,0 +1,3 @@
+<?php
+// Gogle Analytics code.
+?>

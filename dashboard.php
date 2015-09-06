@@ -16,7 +16,7 @@
   <script src="dash.js"></script>
   <script>
     vex.defaultOptions.className = 'vex-theme-default';
-    var dashId = '<?php echo $_GET['id'];?>';
+    var dashId = <?php echo "'".preg_replace("/[^a-zA-Z0-9]+/", "", substr($_GET["id"], 0, 5))."'";?>;
 
     $(function() {
       switchDashboard(dashId);
@@ -62,5 +62,6 @@
    <button onClick="done(dashId)">Done</button>
  </div>
  <div id="dashboard"></div>
+ <?php include_once("analyticstracking.php") ?>
 </body>
 </html>

@@ -3,17 +3,22 @@
 <head>
   <meta charset="utf-8">
   <title>StatHat Dashboard</title>
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="vex.css">
+  <link rel="stylesheet" href="vex-theme-default.css">
+
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="vex.js"></script>
   <script src="vex.dialog.js"></script>
-  <link rel="stylesheet" href="style.css">
   <script>
-
+    vex.defaultOptions.className = 'vex-theme-default';
     $(function() {
       <?php
           if (isset($_GET['id'])) {
-            $id = $_GET['id'];
+            $id = preg_replace("/[^a-zA-Z0-9]+/", "", substr($_GET["id"], 0, 5));
             echo "$('#dashboardId').val('" . $id . "');";
             echo "switchDashboard('" . $id . "');";
           }
@@ -70,5 +75,6 @@
   <button onClick="create()">Create dashboard</button>
   </div>
  <div id="dashboard"></div>
+ <?php include_once("analyticstracking.php") ?>
 </body>
 </html>

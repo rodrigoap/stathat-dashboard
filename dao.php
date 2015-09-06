@@ -35,7 +35,7 @@ function rest_put($req, $dblink) {
 
 function rest_post($req, $dblink) {
 	$jsonText = file_get_contents('php://input');
-  $idDash = $_GET['id'];
+  $idDash = filterDashId();
 	$query = "update stat set json=? where id_dash=?";
     $stmt = $dblink->prepare($query) or die("Prepare stmt die.");
     $stmt->bind_param("ss", $jsonText, $idDash);
@@ -46,7 +46,7 @@ function rest_post($req, $dblink) {
 
 function rest_get($req, $dblink) {
 	$json = "{}";
-	$idDash = $_GET['id'];
+	$idDash = filterDashId();
 	$query = "select json from stat where id_dash=?";
     $stmt = $dblink->prepare($query) or die("Prepare stmt die.");
     $stmt->bind_param("s", $idDash);
@@ -56,6 +56,10 @@ function rest_get($req, $dblink) {
     	echo $json;
     }
     $stmt->close();
+}
+
+function filterDashId() {
+  return preg_replace("/[^a-zA-Z0-9]+/", "", substr($_GET["id"], 0, 5));
 }
 
 function generateRandomString($length = 5) {
