@@ -30,6 +30,7 @@
       $("#editCurrent").prop("disabled", false);
       $.get( "dao.php?id="+dashId, function(data) {
         //alert(data);
+        $("#dashboard").empty();
         var dashboardContent = JSON.parse(data);
         $("body").css("background-color", dashboardContent.backgroundColor);
         //alert(dashboardContent);
