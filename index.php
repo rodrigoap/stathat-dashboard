@@ -8,14 +8,27 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="vex.css">
   <link rel="stylesheet" href="vex-theme-default.css">
+  <link rel="stylesheet" href="tip-twitter.css">
 
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="jquery.poshytip.min.js"></script>
   <script src="vex.js"></script>
   <script src="vex.dialog.js"></script>
   <script>
     vex.defaultOptions.className = 'vex-theme-default';
     $(function() {
+      $('#createNewDashboard').poshytip({
+        className:'tip-twitter',
+      	alignTo: 'target',
+      	alignX: 'center',
+      	offsetY: 5,
+      	allowTipHover: false,
+      	fade: true,
+      	slide: false
+      });
+      $('#createNewDashboard').poshytip('show');
+      $('#createNewDashboard').poshytip('hideDelayed', 5000);
       <?php
           if (isset($_GET['id'])) {
             $id = preg_replace("/[^a-zA-Z0-9]+/", "", substr($_GET["id"], 0, 5));
@@ -74,7 +87,7 @@
   <input id="dashboardId" name="dashboardId" type="text" value="Dashboard id"/>
   <button onClick="switchDashboard()">Load</button>&nbsp;
   <button id="editCurrent" onClick="editCurrent()" disabled="true">Edit current</button>
-  <button onClick="create()">Create dashboard</button>
+  <button id="createNewDashboard" onClick="create()" title="Start here...">Create dashboard</button>
   </div>
  <div id="dashboard"></div>
 </body>
