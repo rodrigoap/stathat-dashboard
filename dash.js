@@ -16,7 +16,6 @@ var Stat = function(){
 
 StatDash.prototype.add = function() {
   //ANklJ KeRcj EAnL 6UVc
-  alert("add " + this);
   var statName = $("#statName").val();
   if (this.dashboardContent.stats[statName]) {
     if (confirm("Stat already exists. Replace?")) {
