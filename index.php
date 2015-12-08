@@ -15,7 +15,9 @@
   <script src="jquery.poshytip.min.js"></script>
   <script src="vex.js"></script>
   <script src="vex.dialog.js"></script>
+  <script src="dash.js"></script>
   <script>
+    var aDash = new StatDash();
     vex.defaultOptions.className = 'vex-theme-default';
     $(function() {
       $('#createNewDashboard').poshytip({
@@ -33,50 +35,11 @@
           if (isset($_GET['id'])) {
             $id = preg_replace("/[^a-zA-Z0-9]+/", "", substr($_GET["id"], 0, 5));
             echo "$('#dashboardId').val('" . $id . "');";
-            echo "switchDashboard('" . $id . "');";
+            echo "aDash.switchDashboard('" . $id . "');";
+            echo "$('#editCurrent').removeAttr('disabled');";
           }
        ?>
     });
-
-    function switchDashboard() {
-      var dashId = $("#dashboardId").val();
-      $("#editCurrent").prop("disabled", false);
-      $.get( "dao.php?id="+dashId, function(data) {
-        //alert(data);
-        $("#dashboard").empty();
-        var dashboardContent = JSON.parse(data);
-        $("body").css("background-color", dashboardContent.backgroundColor);
-        //alert(dashboardContent);
-        $.each(dashboardContent.stats, function(key, stat){
-
-          var statName = stat.name;
-          var chartSize = stat.chartSize;
-          var title = stat.title;
-          var chartStyle = stat.chartStyle;
-          var chartFooter = "";
-          if (chartStyle === 'mini' ||chartStyle === 'spark') {
-            chartFooter = "<div class='chartFooter'>" + title + "</div>";
-          }
-          $("#dashboard").append("<div id='"+statName+
-              "' style='position:absolute;left:"+stat.x+"px;top:"+stat.y+
-              "px'><script>StatHatEmbed.render({s1: '"+statName+
-              "', w: "+chartSize.w+
-              ", h: "+chartSize.h+
-              ", title: '"+title+
-              "', tf:'half_compare', style:'"+chartStyle+
-              "'});<\/script>"+chartFooter+"</div>");
-        });
-    });
-  }
-
-  function create() {
-    window.location = "dash.html";
-  }
-
-  function editCurrent() {
-    var dashboardId = $("#dashboardId").val();
-    window.location = "dashboard.php?id=" + dashboardId;
-  }
   </script>
 </head>
 <body>
@@ -85,9 +48,9 @@
  <div id="menu">
   <img src="statdash.png" style="vertical-align:bottom"/>&nbsp;&nbsp;|&nbsp;&nbsp;
   <input id="dashboardId" name="dashboardId" type="text" value="Dashboard id"/>
-  <button onClick="switchDashboard()">Load</button>&nbsp;
-  <button id="editCurrent" onClick="editCurrent()" disabled="true">Edit current</button>
-  <button id="createNewDashboard" onClick="create()" title="Start here...">Create dashboard</button>
+  <button onClick="aDash.switchDashboardOld()">Load</button>&nbsp;
+  <button id="editCurrent" onClick="aDash.editCurrent()" disabled="true">Edit current</button>
+  <button id="createNewDashboard" onClick="aDash.create()" title="Start here...">Create dashboard</button>
   </div>
  <div id="dashboard"></div>
 </body>

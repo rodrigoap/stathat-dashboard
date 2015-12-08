@@ -15,6 +15,7 @@
   <script src="vex.dialog.js"></script>
   <script src="dash.js"></script>
   <script>
+    var aDash = new StatDash();
     vex.defaultOptions.className = 'vex-theme-default';
     var dashId = '';
     $(function() {
@@ -56,9 +57,9 @@
      <option value="#FF9CB3">Pink</option>
      <option value="#EA4A4A">Red</option>
    </select>
-   <button onClick="add()">Add</button>
-   <button onClick="save()">Save</button>
-   <button onClick="done(dashId)">Done</button>
+   <button onClick="aDash.add()">Add</button>
+   <button onClick="aDash.save()">Save</button>
+   <button onClick="aDash.done(dashId)">Done</button>
  </div>
  <div id="dashboard"></div>
 </body>

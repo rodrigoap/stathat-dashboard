@@ -15,11 +15,12 @@
   <script src="vex.dialog.js"></script>
   <script src="dash.js"></script>
   <script>
+    var aDash = new StatDash();
     vex.defaultOptions.className = 'vex-theme-default';
     var dashId = <?php echo "'".preg_replace("/[^a-zA-Z0-9]+/", "", substr($_GET["id"], 0, 5))."'";?>;
 
     $(function() {
-      switchDashboard(dashId);
+      aDash.switchDashboard(dashId);
       $("#evt_color").change(function() {
               $("body").css("background-color", $(this).val());
       });
@@ -58,9 +59,9 @@
      <option value="#FF9CB3">Pink</option>
      <option value="#EA4A4A">Red</option>
    </select>
-   <button onClick="add()">Add</button>
-   <button onClick="update()">Save</button>
-   <button onClick="done(dashId)">Done</button>
+   <button onClick="aDash.add()">Add</button>
+   <button onClick="aDash.update()">Save</button>
+   <button onClick="aDash.done(dashId)">Done</button>
  </div>
  <div id="dashboard"></div>
 </body>

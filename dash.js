@@ -1,10 +1,24 @@
-var dashboardContent = {};
-dashboardContent.stats = {};
+var StatDash = function(){
+  this.dashboardContent = {};
+  this.dashboardContent.stats = {};
+  this.backgroundColor = "";
+};
 
-function add() {
-  //ANklJ KeRcj EAnL
+var Stat = function(){
+  this.name = "";
+  this.title = "";
+  this.chartStyle = "";
+  this.chartSize = "";
+  this.x = 0;
+  this.y = 0;
+};
+
+
+StatDash.prototype.add = function() {
+  //ANklJ KeRcj EAnL 6UVc
+  alert("add " + this);
   var statName = $("#statName").val();
-  if (dashboardContent.stats[statName]) {
+  if (this.dashboardContent.stats[statName]) {
     if (confirm("Stat already exists. Replace?")) {
       $("#" + statName).remove();
     } else {
@@ -35,29 +49,26 @@ function add() {
       "'});<\/script>"+chartFooter+"</div>");
   $("#" + statName).draggable();
 
-  var stat = {};
+  var stat = new Stat();
   stat.name = statName;
   stat.title = title;
   stat.chartStyle = chartStyle;
   stat.chartSize = chartSize;
-  dashboardContent.stats[statName] = stat;
-  //alert("added " + dashboardContent.stats[statName].name);
+  this.dashboardContent.stats[statName] = stat;
 }
 
-function save() {
+StatDash.prototype.save = function() {
   if (dashId==='') {
+    var theDash = this;
     $( ".draggable" ).each(function(index, element){
       var statName = element.id;
-      //alert("save " + statName);
-      var stat = dashboardContent.stats[statName];
+      var stat = theDash.dashboardContent.stats[statName];
       var offset = $("#" + statName).offset();
       stat.y = offset.top;
       stat.x = offset.left;
-      //dashboardContent.stats[statName] = stat;
     });
-    dashboardContent.backgroundColor = $("#evt_color").val();
-    var jsonText = JSON.stringify(dashboardContent, null, 2);
-    //alert(jsonText);
+    this.dashboardContent.backgroundColor = $("#evt_color").val();
+    var jsonText = JSON.stringify(this.dashboardContent, null, 2);
     $.ajax({
         url:"dao.php",
         type:"PUT",
@@ -70,23 +81,21 @@ function save() {
         }
     });
   } else {
-    update();
+    this.update();
   }
 }
 
-function update() {
+StatDash.prototype.update = function() {
+  var theDash = this;
   $(".draggable").each(function(index, element){
     var statName = element.id;
-    //alert("save " + statName);
-    var stat = dashboardContent.stats[statName];
+    var stat = theDash.dashboardContent.stats[statName];
     var offset = $("#" + statName).offset();
     stat.y = offset.top;
     stat.x = offset.left;
-    //dashboardContent.stats[statName] = stat;
   });
-  dashboardContent.backgroundColor = $("#evt_color").val();
-  var jsonText = JSON.stringify(dashboardContent, null, 2);
-  //alert(jsonText);
+  this.dashboardContent.backgroundColor = $("#evt_color").val();
+  var jsonText = JSON.stringify(this.dashboardContent, null, 2);
   $.ajax({
       url:"dao.php?id=" + dashId,
       type:"POST",
@@ -99,12 +108,12 @@ function update() {
   });
 }
 
-function switchDashboard(dashId) {
+StatDash.prototype.switchDashboard = function(dashId) {
+  var theDash = this;
   $.get("dao.php?id="+dashId, function(data) {
-    dashboardContent = JSON.parse(data);
-    $("#evt_color").val(dashboardContent.backgroundColor).change();
-    $.each(dashboardContent.stats, function(key, stat){
-
+    theDash.dashboardContent = JSON.parse(data);
+    $("#evt_color").val(theDash.dashboardContent.backgroundColor).change();
+    $.each(theDash.dashboardContent.stats, function(key, stat){
       var statName = stat.name;
       var chartSize = stat.chartSize;
       var title = stat.title;
@@ -113,7 +122,6 @@ function switchDashboard(dashId) {
       if (chartStyle === 'mini' ||chartStyle === 'spark') {
         chartFooter = "<div class='chartFooter'>" + title + "</div>";
       }
-
       $("#dashboard").append("<div id='"+statName+
           "' class='draggable ui-widget-content' style='position:absolute;left:"+stat.x+"px;top:"+stat.y+
           "px'><script>StatHatEmbed.render({s1: '"+statName+
@@ -124,10 +132,47 @@ function switchDashboard(dashId) {
           "'});<\/script>"+chartFooter+"</div>");
       $("#" + statName).draggable();
     });
-});
+  });
 }
 
-function done(dashId) {
-  //var dashId = $('#dashboardId').val();
+StatDash.prototype.switchDashboardOld = function() {
+      var dashId = $("#dashboardId").val();
+      $("#editCurrent").prop("disabled", false);
+      $.get( "dao.php?id="+dashId, function(data) {
+        $("#dashboard").empty();
+        this.dashboardContent = JSON.parse(data);
+        $("body").css("background-color", this.dashboardContent.backgroundColor);
+        $.each(this.dashboardContent.stats, function(key, stat){
+          var statName = stat.name;
+          var chartSize = stat.chartSize;
+          var title = stat.title;
+          var chartStyle = stat.chartStyle;
+          var chartFooter = "";
+          if (chartStyle === 'mini' ||chartStyle === 'spark') {
+            chartFooter = "<div class='chartFooter'>" + title + "</div>";
+          }
+          $("#dashboard").append("<div id='"+statName+
+              "' style='position:absolute;left:"+stat.x+"px;top:"+stat.y+
+              "px'><script>StatHatEmbed.render({s1: '"+statName+
+              "', w: "+chartSize.w+
+              ", h: "+chartSize.h+
+              ", title: '"+title+
+              "', tf:'half_compare', style:'"+chartStyle+
+              "'});<\/script>"+chartFooter+"</div>");
+        });
+    });
+  }
+
+
+StatDash.prototype.done = function(dashId) {
   window.location = "index.php?id=" + dashId;
+}
+
+StatDash.prototype.create = function() {
+  window.location = "dash.html";
+}
+
+StatDash.prototype.editCurrent = function() {
+  var dashboardId = $("#dashboardId").val();
+  window.location = "dashboard.php?id=" + dashboardId;
 }
